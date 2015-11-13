@@ -1,26 +1,12 @@
-let LoginController = function ($scope, $http, PARSE) {
+ let LoginController = function ($scope, UserService, $cookies, $state) {
 
-  let url = PARSE.URL + 'classes/whiskey';
-
-  let Whiskey =  function (obj) {
-    this.name = obj.name;
-    this.maker = obj.maker;
-    this.hasTried = false;
-  };
-
-  $scope.addWhiskey = (obj) => {
-
-    let w = new Whiskey(obj);
-      console.log(w);
-
-    $http.post(url, w, PARSE.CONFIG).then( (res) => {
-      $scope.whiskey = {};
-
+  $scope.login = function (user) {
+    UserService.sendLogin(user).then( (res) => {
+      UserService.loginSuccess(res);
     });
-
   };
 };
 
-LoginController.$inject = ['$scope', '$http', 'PARSE'];
+LoginController.$inject = ['$scope', 'UserService', '$cookies', '$state'];
 
-export default LoginController; 
+export default LoginController;

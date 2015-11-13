@@ -1,10 +1,16 @@
-<h3>Add</h3>
+<h3>Add/Edit a Recipe</h3>
 
-<form ng-submit="">
-  <input placeholder="" ng-model="">
-  <input placeholder="" ng-model="">
-  <input placeholder="" ng-model="">
-  <input placeholder="" ng-model="">
+<form ng-submit="addRecipe(recipe)">
+  <input placeholder="Recipe Name" ng-model="recipe.name">
+  <input placeholder="Recipe Author" ng-model="recipe.author">
+  <label>Ingredients</label>
+  <textarea name="ingredients" rows="10" cols="70" ng-model="user.ingredients">    
+  </textarea>
+  <label>Instructions</label>
+  <textarea name="instructions" rows="10" cols="70" ng-model="user.instructions">    
+  </textarea>
+  <button>Update</button>
+  
 
 </form>  
 
@@ -16,11 +22,5 @@
 
 
 
-<!-- <form ng-submit="addWhiskey(whiskey)">
-
-  <input placeholder="Whiskey Name" ng-model="whiskey.name">
-  <input placeholder="Whiskey Maker" ng-model="whiskey.maker">
-  <button>Add Whiskey</button>
 
 
-</form> -->

@@ -1,18 +1,13 @@
 <div class="page-header">
 
-  <h1>User Login</h1>
+  <h3>User Login</h3>
   <hr/>
 </div>  
 
-<form name="userForm" ng-submit="submitForm(userform)"> 
-
-<!-- novalidate prevents HTML5 validation. All login entries required-->
+<form ng-submit="login(user)"> 
  
   <div class="form-group">
-    <fieldset>
-      <label>Name</label
-      <input type="text" name="name" ng-model="name" required>
-  
+    <fieldset>        
       <label>Username</label>
       <input type="text" ng-model="user.name" required>
 
@@ -22,8 +17,7 @@
       <label>Password</label>
       <input type="text" ng-model="user.pwd" required>      
 
-      <div id class="loginbtn"><button ng-click="myForm.submitTheForm()">Login</button>
-      </div>
+      <button>Login</button>      
     </fieldset>
   </div>
 </form>      

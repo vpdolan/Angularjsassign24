@@ -1,16 +1,20 @@
-let SingleController = function ($scope, $stateParams, $http, PARSE) {
+let SingleController = function ($scope, $stateParams, RecipeService, $state) {
 
-  let url = PARSE.URL + 'classes/whiskey' + $stateParams.whiskeyId;
-
-  $http.get(url, PARSE.CONFIG).then((res) => {
-
-    $scope.singleWhiskey = res.data;
-
+  RecipeService.getRecipe($stateParams.recipeId).then( (res) => {
+    $scope.singleRecipe = res.data;
   });
 
+  $scope.deleteMe = function (obj) {
+    RecipeService.delete(obj).then( (res) => {
+      console.log(res);
+      $state.go('root.recipe');
+    });
+  };
+ }; 
 
-};
-
-SingleController.$inject = ['$scope', '$stateParams', '$http', 'PARSE'];
+ SingleController.$inject = ['$scope', '$stateParams', 'RecipeService', '$state'];
 
 export default SingleController;
+
+
+ 

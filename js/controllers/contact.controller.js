@@ -1,20 +1,21 @@
 let ContactController = function ($scope, $http, PARSE) {
 
-  let url = PARSE.URL + 'classes/whiskey';
+  let url = PARSE.URL + 'classes/recipe';
 
-  let Whiskey =  function (obj) {
+  let Recipe =  function (obj) {
     this.name = obj.name;
-    this.maker = obj.maker;
-    this.hasTried = false;
+    this.author = obj.author;
+    this.ingredients = obj.ingredients;
+    this.instructions = obj.instructions;
   };
 
-  $scope.addWhiskey = (obj) => {
+  $scope.addRecipe = (obj) => {
 
-    let w = new Whiskey(obj);
+    let r = new Recipe(obj);
       console.log(w);
 
-    $http.post(url, w, PARSE.CONFIG).then( (res) => {
-      $scope.whiskey = {};
+    $http.post(url, r, PARSE.CONFIG).then( (res) => {
+      $scope.recipe = {};
 
     });
 

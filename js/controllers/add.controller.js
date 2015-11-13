@@ -1,20 +1,22 @@
 let AddController = function ($scope, $http, PARSE) {
 
-  let url = PARSE.URL + 'classes/whiskey';
+  let url = PARSE.URL + 'classes/recipes';
 
-  let Whiskey =  function (obj) {
-    this.name = obj.name;
-    this.maker = obj.maker;
-    this.hasTried = false;
+  let recipe =  function (obj) {
+    this.recipe = obj.recipe;
+    this.author = obj.author;
+    this.ingredients = obj.ingredients;
+    this.instructions = obj.instructions;
+    this.url = obj.url;
   };
 
-  $scope.addWhiskey = (obj) => {
+  $scope.addRecipe = (obj) => {
 
-    let w = new Whiskey(obj);
-      console.log(w);
+    let r = new Recipe(obj);
+      console.log(addRecipe);
 
-    $http.post(url, w, PARSE.CONFIG).then( (res) => {
-      $scope.whiskey = {};
+    $http.post(url, r, PARSE.CONFIG).then( (res) => {
+      $scope.recipe = {};
 
     });
 

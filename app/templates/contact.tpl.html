@@ -1,0 +1,15 @@
+<h3>Contact Us</h3><hr/>
+
+<form ng-submit="addRecipe(recipe)">
+  <label>Username</label>   <input type="text" ng-model="user.name" required>
+    
+  <label>Email</label>
+  <input type="text" ng-model="user.email" required>
+
+  <label>Comments</label>
+  <textarea name="comments" rows="7" ng-model="user.comments">    
+  </textarea>
+  <button>Submit</button>
+</form>
+
+  

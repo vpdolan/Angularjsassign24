@@ -9,15 +9,21 @@ let config = function($stateProvider, $urlRouterProvider) {
 
     })
 
-    .state('root.list', {
+    .state('root.home', {
       url: '/',
-      controller: 'ListController',
-      templateUrl: 'templates/list.tpl.html'
+      controller: 'HomeController',
+      templateUrl: 'templates/home.tpl.html'
+    })
+
+    .state('root.recipe', {
+      url: '/recipes',
+      controller: 'RecipeController',
+      templateUrl: 'templates/recipe.tpl.html'
 
     })
 
     .state('root.single', {
-      url: '/single/:whiskeyId',
+      url: '/single/:recipeId',
       controller: 'SingleController',
       templateUrl: 'templates/single.tpl.html'
     })
@@ -41,6 +47,7 @@ let config = function($stateProvider, $urlRouterProvider) {
     })
 
 };
+
 
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
 

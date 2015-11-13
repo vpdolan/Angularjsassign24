@@ -1,32 +1,42 @@
-console.log('Hello, World');
 import angular from 'angular';
 import 'angular-ui-router';
+import 'angular-cookies';
 
 import config from './config';
 
 import AddController from './controllers/add.controller';
 
-import ListController from './controllers/list.controller';
+import RecipeController from './controllers/recipe.controller';
 
 import SingleController from './controllers/single.controller';
 
 import ContactController from './controllers/contact.controller';
 
+import LoginController from './controllers/login.controller';
+
+import RecipeService from './services/recipe.service';
+
+import UserService from './services/user.service';
+
+
 angular
-  .module('app', ['ui.router'])
+  .module('app', ['ui.router', 'ngCookies'])
   .constant('PARSE', {
     URL: 'https://api.parse.com/1/',
     CONFIG: {
       headers: {
-        'X-Parse-Application-Id': 'WJbqS7RF79Y1mCdViGxV4F6kXUkhAFNYh0eCDH5I',
-        'X-Parse-REST-API-Key': 'Cg9uGXVT5kTablEQgoZ69pAgOjr5QptYVWGa6hNO'
+        'X-Parse-Application-Id': 'myyTda0UsHKGdK768BddXpjlxSBhK0on9AnKKPcA',
+        'X-Parse-REST-API-Key': '9guoOim0om0wtLJkyl7QH6CO9D3cZ2Oz7gH7ZZIm'
       }
 
     }
   })
   .config(config)
   .controller('AddController', AddController)
-  .controller('ListController', ListController)
+  .controller('RecipeController', RecipeController)
   .controller('SingleController', SingleController)
   .controller('ContactController', ContactController)
+  .controller('LoginController', LoginController)
+  .service('RecipeService', RecipeService)
+  .service('UserService', UserService)
   ;
