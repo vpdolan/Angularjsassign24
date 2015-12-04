@@ -18,6 +18,8 @@ import RecipeService from './services/recipe.service';
 
 import UserService from './services/user.service';
 
+import HomeController from './controllers/home.controller';
+
 
 angular
   .module('app', ['ui.router', 'ngCookies'])
@@ -37,6 +39,7 @@ angular
   .controller('SingleController', SingleController)
   .controller('ContactController', ContactController)
   .controller('LoginController', LoginController)
+  .controller('HomeController', HomeController)
   .service('RecipeService', RecipeService)
   .service('UserService', UserService)
   ;

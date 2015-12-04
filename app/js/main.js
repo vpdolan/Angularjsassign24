@@ -118,6 +118,37 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+var HomeController = function HomeController($scope, UserService, $state) {
+
+  var promise = UserService.checkAuth();
+
+  if (promise) {
+    promise.then(function (res) {
+      console.log(res);
+      if (res.data.status === 'Authentication failed.') {
+        $state.go('root.login');
+      } else {
+        $scope.message = 'I am logged in';
+      }
+    });
+  }
+
+  $scope.logmeout = function () {
+    UserService.logout();
+  };
+};
+
+HomeController.$inject = ['$scope', 'UserService', '$state'];
+
+exports['default'] = HomeController;
+module.exports = exports['default'];
+
+},{}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 var LoginController = function LoginController($scope, UserService, $cookies, $state) {
 
   $scope.login = function (user) {
@@ -132,7 +163,7 @@ LoginController.$inject = ['$scope', 'UserService', '$cookies', '$state'];
 exports['default'] = LoginController;
 module.exports = exports['default'];
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -169,7 +200,7 @@ exports['default'] = RecipeController;
 // export default SingleController;
 module.exports = exports['default'];
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -194,7 +225,7 @@ SingleController.$inject = ['$scope', '$stateParams', 'RecipeService', '$state']
 exports['default'] = SingleController;
 module.exports = exports['default'];
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -239,6 +270,10 @@ var _servicesUserService = require('./services/user.service');
 
 var _servicesUserService2 = _interopRequireDefault(_servicesUserService);
 
+var _controllersHomeController = require('./controllers/home.controller');
+
+var _controllersHomeController2 = _interopRequireDefault(_controllersHomeController);
+
 _angular2['default'].module('app', ['ui.router', 'ngCookies']).constant('PARSE', {
   URL: 'https://api.parse.com/1/',
   CONFIG: {
@@ -248,9 +283,9 @@ _angular2['default'].module('app', ['ui.router', 'ngCookies']).constant('PARSE',
     }
 
   }
-}).config(_config2['default']).controller('AddController', _controllersAddController2['default']).controller('RecipeController', _controllersRecipeController2['default']).controller('SingleController', _controllersSingleController2['default']).controller('ContactController', _controllersContactController2['default']).controller('LoginController', _controllersLoginController2['default']).service('RecipeService', _servicesRecipeService2['default']).service('UserService', _servicesUserService2['default']);
+}).config(_config2['default']).controller('AddController', _controllersAddController2['default']).controller('RecipeController', _controllersRecipeController2['default']).controller('SingleController', _controllersSingleController2['default']).controller('ContactController', _controllersContactController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('HomeController', _controllersHomeController2['default']).service('RecipeService', _servicesRecipeService2['default']).service('UserService', _servicesUserService2['default']);
 
-},{"./config":1,"./controllers/add.controller":2,"./controllers/contact.controller":3,"./controllers/login.controller":4,"./controllers/recipe.controller":5,"./controllers/single.controller":6,"./services/recipe.service":8,"./services/user.service":9,"angular":14,"angular-cookies":11,"angular-ui-router":12}],8:[function(require,module,exports){
+},{"./config":1,"./controllers/add.controller":2,"./controllers/contact.controller":3,"./controllers/home.controller":4,"./controllers/login.controller":5,"./controllers/recipe.controller":6,"./controllers/single.controller":7,"./services/recipe.service":9,"./services/user.service":10,"angular":15,"angular-cookies":12,"angular-ui-router":13}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -313,52 +348,52 @@ RecipeService.$inject = ['$http', 'PARSE'];
 exports['default'] = RecipeService;
 module.exports = exports['default'];
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var UserService = function UserService($http, SERVER, $cookies, $state) {
+var UserService = function UserService($http, PARSE, $cookies, $state) {
 
-  console.log(SERVER);
+  console.log(PARSE);
 
   this.checkAuth = function () {
 
     var token = $cookies.get('authToken');
 
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+    PARSE.CONFIG.headers['X-AUTH-TOKEN'] = token;
 
     if (token) {
-      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
+      return $http.get(PARSE.URL + 'check', PARSE.CONFIG);
     } else {
       $state.go('root.login');
     }
   };
 
   this.sendLogin = function (userObj) {
-    return $http.post(SERVER.URL + 'login', userObj, SERVER.CONFIG);
+    return $http.post(PARSE.URL + 'login', userObj, PARSE.CONFIG);
   };
 
   this.loginSuccess = function (res) {
     $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    PARSE.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
   };
 
   this.logout = function () {
     $cookies.remove('authToken');
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
+    PARSE.CONFIG.headers['X-AUTH-TOKEN'] = null;
     $state.go('root.login');
   };
 };
 
-UserService.$inject = ['$http', 'SERVER', '$cookies', '$state'];
+UserService.$inject = ['$http', 'PARSE', '$cookies', '$state'];
 
 exports['default'] = UserService;
 module.exports = exports['default'];
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -681,11 +716,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":10}],12:[function(require,module,exports){
+},{"./angular-cookies":11}],13:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -5056,7 +5091,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -33961,11 +33996,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":13}]},{},[7])
+},{"./angular":14}]},{},[8])
 
 
 //# sourceMappingURL=main.js.map
