@@ -10,15 +10,22 @@ let config = function($stateProvider, $urlRouterProvider) {
     })
 
     .state('root.home', {
-      url: '/',
+      url: '/home',
       controller: 'HomeController',
       templateUrl: 'templates/home.tpl.html'
     })
 
     .state('root.recipe', {
-      url: '/recipes',
+      url: '/',
       controller: 'RecipeController',
-      templateUrl: 'templates/recipe.tpl.html'
+      templateUrl: 'templates/recipes.tpl.html'
+
+    })
+      
+    .state('root.edit', {
+      url: '/edit/:recipeId',
+      controller: 'EditController',
+      templateUrl: 'templates/editRecipes.tpl.html'
 
     })
 
@@ -28,10 +35,16 @@ let config = function($stateProvider, $urlRouterProvider) {
       templateUrl: 'templates/single.tpl.html'
     })
 
+    .state('root.about', {
+      url: '/about',
+      controller: "AboutController",
+      templateUrl: "templates/about.tpl.html"
+    })
+
     .state('root.add', {
       url: '/add',
       controller: 'AddController',
-      templateUrl: 'templates/add.tpl.html'
+      templateUrl: 'templates/addRecipes.tpl.html'
     })
 
     .state('root.contact', {
@@ -44,7 +57,7 @@ let config = function($stateProvider, $urlRouterProvider) {
       url: '/login',
       controller: 'LoginController',
       templateUrl: 'templates/login.tpl.html'
-    })
+    });
 
 };
 

@@ -1,7 +1,13 @@
-<h3>{{ singleRecipe.recipe }}</h3>
+<h3>{{ singleRecipeDetails.Name}} - {{ singleRecipeDetails.Author }}</h3>
 
-<p>This terrific breakfast dish was created by {{ singleRecipe.author }}</p><hr/>
+<a href="#/edit/{{ singleRecipeDetails.objectId }}">Edit Recipe</a>
+<a href="#/" ng-click="delete(singleRecipeDetails)">Delete Recipe</a>
+<hr/>
 
-<div class="photoHolder">
-  <img src="{{ singleRecipe.url }}">
- </div>
+<img id="singleImage" ng-src="{{ singleRecipeDetails.Picture }}">
+<hr/>
+
+<h4>Ingredients</h4>
+<p class="text">"{{ singleRecipeDetails.Ingredients }}</p>
+<h4>Baking Instructions</h4>
+<p class="text">{{ singleRecipeDetails.Instructions }}</p>  

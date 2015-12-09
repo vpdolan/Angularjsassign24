@@ -1,18 +1,24 @@
-let SingleController = function ($scope, $stateParams, RecipeService, $state) {
+let SingleController = function ($scope, $stateParams, $http, PARSE, RecipeService, $state) {
 
-  RecipeService.getRecipe($stateParams.recipeId).then( (res) => {
-    $scope.singleRecipe = res.data;
+  RecipeService.getSingleRecipe($stateParams.recipeId).then( (res) => {
+    $scope.singleRecipeDetails = res.data;
   });
 
-  $scope.deleteMe = function (obj) {
-    RecipeService.delete(obj).then( (res) => {
-      console.log(res);
-      $state.go('root.recipe');
-    });
-  };
- }; 
+  $scope.delete = function (obj) {
+    let reply = confirm('Please Confirm' + obj.Name + ' Will Be Permanently Deleted');
+    if (reply) {  
+      RecipeService.delete(obj).then( (res) => {
+        alert ('Recipe Permanently Deleted');
+        $state.go('root.recipe');
 
- SingleController.$inject = ['$scope', '$stateParams', 'RecipeService', '$state'];
+      });
+    } else {
+        alert ('Not Deleted');
+    }  
+  };
+}; 
+
+ SingleController.$inject = ['$scope', '$stateParams', '$http', 'PARSE', 'RecipeService', '$state'];
 
 export default SingleController;
 

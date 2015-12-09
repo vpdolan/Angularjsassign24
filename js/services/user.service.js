@@ -23,7 +23,7 @@ let UserService = function($http, PARSE, $cookies, $state) {
   this.loginSuccess = function (res) {
     $cookies.put('authToken', res.data.auth_token);
     PARSE.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
-    $state.go('root.home');
+    $state.go('root.recipe');
   };
 
   this.logout = function () {

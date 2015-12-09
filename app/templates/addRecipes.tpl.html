@@ -1,0 +1,26 @@
+<h3>Add a Recipe</h3>
+
+<form ng-submit="addRecipe(recipe)">
+  <input placeholder="Recipe Name" ng-model="recipe.name">
+  <input placeholder="Recipe Author" ng-model="recipe.author">
+  <label>Ingredients</label>
+  <textarea name="ingredients" rows="10" cols="70" ng-model="recipe.ingredients">    
+  </textarea>
+  <label>Instructions</label>
+  <textarea name="instructions" rows="10" cols="70" ng-model="recipe.instructions">    
+  </textarea>
+  <hr/>
+  <input placeholder="Image URL" ng-model="recipe.url">
+  <button>Add Recipe</button>
+</form>  
+
+
+
+
+
+
+
+
+
+
+

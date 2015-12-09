@@ -2,44 +2,37 @@ let RecipeService = function($http, PARSE) {
   
   let url = PARSE.URL + 'classes/recipes';
 
-  let checkAuth = function () {
-    return true;
+  this.getRecipeList = function () {     
+    return $http({
+      url : url,
+      headers : PARSE.CONFIG.headers,
+      method : 'GET',
+      cache : true
+    });
   };
 
-  this.getRecipes = function () {
-    if (checkAuth()){     
-      return $http({
-        url: url,
-        headers: PARSE.CONFIG.headers,
-        method: 'GET',
-        cache: true
-      });
-    }
+  this.getSingleRecipe = function (recipeId) {     
+    return $http({
+      url     : url + '/' + recipeId,
+      method  : 'GET',
+      headers : PARSE.CONFIG.headers,
+      cache   : true
+    });
+    
   };
 
-  this.getRecipe = function (recipeId) {
-    if (checkAuth()){      
-      return $http({
-        method: 'GET',
-        url: url + '/' + recipeId,
-        headers: PARSE.CONFIG.headers,
-        cache: true
-      });
-    }
+  let MyParseDataConstructor = function (obj) {
+    this.Name = obj.name;
+    this.Url = obj.url;
+    this.Ingredients = obj.ingredients;
+    this.Description = obj.description;
+    this.Author = obj.author;
   };
-   
-  //  let Recipe =  function (obj) {
-  //   this.recipe = obj.recipe;
-  //   this.author = obj.author;
-  //   this.ingredients = obj.ingredients;
-  //   this.instructions = obj.instructions;
-  //   this.url = obj.url;
-  // }; 
   
 
-  this.addRecipe = function (obj) {
-    let r = new Recipe(obj);
-    return $http.post(url, r, PARSE.CONFIG);
+  this.addNewRecipe = function (obj) {
+    let temp = new MyParseDataConstructor(obj);
+    return $http.post(url, temp, PARSE.CONFIG);
   };
 
   this.update = function (obj) {
@@ -55,3 +48,5 @@ let RecipeService = function($http, PARSE) {
 RecipeService.$inject = ['$http', 'PARSE'];
 
 export default RecipeService;
+
+
