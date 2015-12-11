@@ -12,10 +12,6 @@ var config = function config($stateProvider, $urlRouterProvider) {
     abstract: true,
     templateUrl: 'templates/layout.tpl.html'
 
-  }).state('root.home', {
-    url: '/home',
-    controller: 'HomeController',
-    templateUrl: 'templates/home.tpl.html'
   }).state('root.recipe', {
     url: '/',
     controller: 'RecipeController',
@@ -38,14 +34,16 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/add',
     controller: 'AddController',
     templateUrl: 'templates/addRecipes.tpl.html'
-  }).state('root.contact', {
+  }).state('root.submissions', {
+    url: '/submissions',
+    controller: 'SubmissionsController as vm',
+    templateUrl: 'templates/submissions.tpl.html'
+  })
+  //using vm, scope not included in ContactController
+  .state('root.contact', {
     url: '/contact',
-    controller: 'ContactController',
+    controller: 'ContactController as vm',
     templateUrl: 'templates/contact.tpl.html'
-  }).state('root.login', {
-    url: '/login',
-    controller: 'LoginController',
-    templateUrl: 'templates/login.tpl.html'
   });
 };
 
@@ -95,9 +93,20 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ContactController = function ContactController($scope, $http, PARSE) {};
+var ContactController = function ContactController($scope, PARSE, ContactService) {
 
-ContactController.$inject = ['$scope', '$http', 'PARSE'];
+  var vm = this;
+
+  vm.newNote = newNote;
+
+  function newNote(recipe) {
+    ContactService.newNote(recipe).then(function (res) {
+      $scope.comments = {};
+    });
+  };
+};
+
+ContactController.$inject = ['$scope', 'PARSE', 'ContactService'];
 
 exports['default'] = ContactController;
 module.exports = exports['default'];
@@ -134,26 +143,6 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var LoginController = function LoginController($scope, UserService, $cookies, $state) {
-
-  $scope.login = function (user) {
-    UserService.sendLogin(user).then(function (res) {
-      UserService.loginSuccess(res);
-    });
-  };
-};
-
-LoginController.$inject = ['$scope', 'UserService', '$cookies', '$state'];
-
-exports['default'] = LoginController;
-module.exports = exports['default'];
-
-},{}],7:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
 
 var RecipeController = function RecipeController($scope, $http, PARSE, RecipeService) {
 
@@ -167,7 +156,7 @@ RecipeController.$inject = ['$scope', '$http', 'PARSE', 'RecipeService'];
 exports['default'] = RecipeController;
 module.exports = exports['default'];
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -197,6 +186,32 @@ SingleController.$inject = ['$scope', '$stateParams', '$http', 'PARSE', 'RecipeS
 exports['default'] = SingleController;
 module.exports = exports['default'];
 
+},{}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var SubmissionsController = function SubmissionsController(PARSE, SubmissionsService) {
+
+  var vm = this;
+
+  vm.title = 'Entries';
+
+  vm.note = getNote();
+
+  function getNote() {
+    SubmissionsService.getEntries().then(function (response) {
+      vm.note = response.data.results;
+    });
+  }
+};
+
+SubmissionsController.$inject = ['PARSE', 'SubmissionsService'];
+
+exports['default'] = SubmissionsController;
+module.exports = exports['default'];
+
 },{}],9:[function(require,module,exports){
 'use strict';
 
@@ -207,8 +222,6 @@ var _angular = require('angular');
 var _angular2 = _interopRequireDefault(_angular);
 
 require('angular-ui-router');
-
-require('angular-cookies');
 
 var _config = require('./config');
 
@@ -230,6 +243,10 @@ var _controllersContactController = require('./controllers/contact.controller');
 
 var _controllersContactController2 = _interopRequireDefault(_controllersContactController);
 
+var _controllersSubmissionsController = require('./controllers/submissions.controller');
+
+var _controllersSubmissionsController2 = _interopRequireDefault(_controllersSubmissionsController);
+
 var _controllersAboutController = require('./controllers/about.controller');
 
 var _controllersAboutController2 = _interopRequireDefault(_controllersAboutController);
@@ -238,19 +255,19 @@ var _controllersRecipeController = require('./controllers/recipe.controller');
 
 var _controllersRecipeController2 = _interopRequireDefault(_controllersRecipeController);
 
-var _controllersLoginController = require('./controllers/login.controller');
-
-var _controllersLoginController2 = _interopRequireDefault(_controllersLoginController);
-
 var _servicesRecipeService = require('./services/recipe.service');
 
 var _servicesRecipeService2 = _interopRequireDefault(_servicesRecipeService);
 
-var _servicesUserService = require('./services/user.service');
+var _servicesContactService = require('./services/contact.service');
 
-var _servicesUserService2 = _interopRequireDefault(_servicesUserService);
+var _servicesContactService2 = _interopRequireDefault(_servicesContactService);
 
-_angular2['default'].module('app', ['ui.router', 'ngCookies']).constant('PARSE', {
+var _servicesSubmissionsService = require('./services/submissions.service');
+
+var _servicesSubmissionsService2 = _interopRequireDefault(_servicesSubmissionsService);
+
+_angular2['default'].module('app', ['ui.router']).constant('PARSE', {
   URL: 'https://api.parse.com/1/',
   CONFIG: {
     headers: {
@@ -259,9 +276,38 @@ _angular2['default'].module('app', ['ui.router', 'ngCookies']).constant('PARSE',
     }
 
   }
-}).config(_config2['default']).controller('AddController', _controllersAddController2['default']).controller('EditController', _controllersEditController2['default']).controller('SingleController', _controllersSingleController2['default']).controller('RecipeController', _controllersRecipeController2['default']).controller('ContactController', _controllersContactController2['default']).controller('AboutController', _controllersAboutController2['default']).controller('LoginController', _controllersLoginController2['default']).service('RecipeService', _servicesRecipeService2['default']).service('UserService', _servicesUserService2['default']);
+}).config(_config2['default']).controller('AddController', _controllersAddController2['default']).controller('EditController', _controllersEditController2['default']).controller('SingleController', _controllersSingleController2['default']).controller('RecipeController', _controllersRecipeController2['default']).controller('ContactController', _controllersContactController2['default']).controller('AboutController', _controllersAboutController2['default']).controller('SubmissionsController', _controllersSubmissionsController2['default']).service('RecipeService', _servicesRecipeService2['default']).service('ContactService', _servicesContactService2['default']).service('SubmissionsService', _servicesSubmissionsService2['default']);
 
-},{"./config":1,"./controllers/about.controller":2,"./controllers/add.controller":3,"./controllers/contact.controller":4,"./controllers/edit.controller":5,"./controllers/login.controller":6,"./controllers/recipe.controller":7,"./controllers/single.controller":8,"./services/recipe.service":10,"./services/user.service":11,"angular":16,"angular-cookies":13,"angular-ui-router":14}],10:[function(require,module,exports){
+},{"./config":1,"./controllers/about.controller":2,"./controllers/add.controller":3,"./controllers/contact.controller":4,"./controllers/edit.controller":5,"./controllers/recipe.controller":6,"./controllers/single.controller":7,"./controllers/submissions.controller":8,"./services/contact.service":10,"./services/recipe.service":11,"./services/submissions.service":12,"angular":15,"angular-ui-router":13}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var ContactService = function ContactService($http, PARSE) {
+
+  var url = PARSE.URL + 'classes/recipes';
+
+  this.newNote = newNote;
+
+  function Note(recipe) {
+    console.log(recipe);
+    this.name = recipe.name;
+    this.comments = recipe.comments;
+  }
+
+  function newNote(recipe) {
+    var n = new Note(recipe);
+    return $http.post(url, n, PARSE.CONFIG);
+  }
+};
+
+ContactService.$inject = ['$http', 'PARSE'];
+
+exports['default'] = ContactService;
+module.exports = exports['default'];
+
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -270,7 +316,7 @@ Object.defineProperty(exports, '__esModule', {
 var RecipeService = function RecipeService($http, PARSE) {
 
   var url = PARSE.URL + 'classes/recipes';
-
+  //View of Existing Recipe List
   this.getRecipeList = function () {
     return $http({
       url: url,
@@ -279,7 +325,7 @@ var RecipeService = function RecipeService($http, PARSE) {
       cache: true
     });
   };
-
+  //View of Single Existing Recipe
   this.getSingleRecipe = function (recipeId) {
     return $http({
       url: url + '/' + recipeId,
@@ -288,20 +334,20 @@ var RecipeService = function RecipeService($http, PARSE) {
       cache: true
     });
   };
-
+  //Adding a New Recipe
   var MyParseDataConstructor = function MyParseDataConstructor(obj) {
-    this.Name = obj.name;
-    this.Url = obj.url;
-    this.Ingredients = obj.ingredients;
-    this.Description = obj.description;
-    this.Author = obj.author;
+    this.name = obj.name;
+    this.url = obj.url;
+    this.ingredients = obj.ingredients;
+    this.description = obj.description;
+    this.author = obj.author;
   };
 
   this.addNewRecipe = function (obj) {
     var temp = new MyParseDataConstructor(obj);
     return $http.post(url, temp, PARSE.CONFIG);
   };
-
+  //Editing and Deleting an Existing Recipe
   this.update = function (obj) {
     return $http.put(url + '/' + obj.objectId, obj, PARSE.CONFIG);
   };
@@ -316,379 +362,29 @@ RecipeService.$inject = ['$http', 'PARSE'];
 exports['default'] = RecipeService;
 module.exports = exports['default'];
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var UserService = function UserService($http, PARSE, $cookies, $state) {
+var SubmissionsService = function SubmissionsService($http, PARSE) {
 
-  console.log(PARSE);
+  var url = PARSE.URL + 'classes/recipes';
 
-  this.checkAuth = function () {
+  this.getEntries = getEntries;
 
-    var token = $cookies.get('authToken');
-
-    PARSE.CONFIG.headers['X-AUTH-TOKEN'] = token;
-
-    if (token) {
-      return $http.get(PARSE.URL + 'check', PARSE.CONFIG);
-    } else {
-      $state.go('root.login');
-    }
-  };
-
-  this.sendLogin = function (userObj) {
-    return $http.post(PARSE.URL + 'login', userObj, PARSE.CONFIG);
-  };
-
-  this.loginSuccess = function (res) {
-    $cookies.put('authToken', res.data.auth_token);
-    PARSE.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
-    $state.go('root.recipe');
-  };
-
-  this.logout = function () {
-    $cookies.remove('authToken');
-    PARSE.CONFIG.headers['X-AUTH-TOKEN'] = null;
-    $state.go('root.login');
-  };
+  function getEntries() {
+    return $http.get(url, PARSE.CONFIG);
+  }
 };
 
-UserService.$inject = ['$http', 'PARSE', '$cookies', '$state'];
+SubmissionsService.$inject = ['$http', 'PARSE'];
 
-exports['default'] = UserService;
+exports['default'] = SubmissionsService;
 module.exports = exports['default'];
 
-},{}],12:[function(require,module,exports){
-/**
- * @license AngularJS v1.4.7
- * (c) 2010-2015 Google, Inc. http://angularjs.org
- * License: MIT
- */
-(function(window, angular, undefined) {'use strict';
-
-/**
- * @ngdoc module
- * @name ngCookies
- * @description
- *
- * # ngCookies
- *
- * The `ngCookies` module provides a convenient wrapper for reading and writing browser cookies.
- *
- *
- * <div doc-module-components="ngCookies"></div>
- *
- * See {@link ngCookies.$cookies `$cookies`} for usage.
- */
-
-
-angular.module('ngCookies', ['ng']).
-  /**
-   * @ngdoc provider
-   * @name $cookiesProvider
-   * @description
-   * Use `$cookiesProvider` to change the default behavior of the {@link ngCookies.$cookies $cookies} service.
-   * */
-   provider('$cookies', [function $CookiesProvider() {
-    /**
-     * @ngdoc property
-     * @name $cookiesProvider#defaults
-     * @description
-     *
-     * Object containing default options to pass when setting cookies.
-     *
-     * The object may have following properties:
-     *
-     * - **path** - `{string}` - The cookie will be available only for this path and its
-     *   sub-paths. By default, this would be the URL that appears in your base tag.
-     * - **domain** - `{string}` - The cookie will be available only for this domain and
-     *   its sub-domains. For obvious security reasons the user agent will not accept the
-     *   cookie if the current domain is not a sub domain or equals to the requested domain.
-     * - **expires** - `{string|Date}` - String of the form "Wdy, DD Mon YYYY HH:MM:SS GMT"
-     *   or a Date object indicating the exact date/time this cookie will expire.
-     * - **secure** - `{boolean}` - The cookie will be available only in secured connection.
-     *
-     * Note: by default the address that appears in your `<base>` tag will be used as path.
-     * This is important so that cookies will be visible for all routes in case html5mode is enabled
-     *
-     **/
-    var defaults = this.defaults = {};
-
-    function calcOptions(options) {
-      return options ? angular.extend({}, defaults, options) : defaults;
-    }
-
-    /**
-     * @ngdoc service
-     * @name $cookies
-     *
-     * @description
-     * Provides read/write access to browser's cookies.
-     *
-     * <div class="alert alert-info">
-     * Up until Angular 1.3, `$cookies` exposed properties that represented the
-     * current browser cookie values. In version 1.4, this behavior has changed, and
-     * `$cookies` now provides a standard api of getters, setters etc.
-     * </div>
-     *
-     * Requires the {@link ngCookies `ngCookies`} module to be installed.
-     *
-     * @example
-     *
-     * ```js
-     * angular.module('cookiesExample', ['ngCookies'])
-     *   .controller('ExampleController', ['$cookies', function($cookies) {
-     *     // Retrieving a cookie
-     *     var favoriteCookie = $cookies.get('myFavorite');
-     *     // Setting a cookie
-     *     $cookies.put('myFavorite', 'oatmeal');
-     *   }]);
-     * ```
-     */
-    this.$get = ['$$cookieReader', '$$cookieWriter', function($$cookieReader, $$cookieWriter) {
-      return {
-        /**
-         * @ngdoc method
-         * @name $cookies#get
-         *
-         * @description
-         * Returns the value of given cookie key
-         *
-         * @param {string} key Id to use for lookup.
-         * @returns {string} Raw cookie value.
-         */
-        get: function(key) {
-          return $$cookieReader()[key];
-        },
-
-        /**
-         * @ngdoc method
-         * @name $cookies#getObject
-         *
-         * @description
-         * Returns the deserialized value of given cookie key
-         *
-         * @param {string} key Id to use for lookup.
-         * @returns {Object} Deserialized cookie value.
-         */
-        getObject: function(key) {
-          var value = this.get(key);
-          return value ? angular.fromJson(value) : value;
-        },
-
-        /**
-         * @ngdoc method
-         * @name $cookies#getAll
-         *
-         * @description
-         * Returns a key value object with all the cookies
-         *
-         * @returns {Object} All cookies
-         */
-        getAll: function() {
-          return $$cookieReader();
-        },
-
-        /**
-         * @ngdoc method
-         * @name $cookies#put
-         *
-         * @description
-         * Sets a value for given cookie key
-         *
-         * @param {string} key Id for the `value`.
-         * @param {string} value Raw value to be stored.
-         * @param {Object=} options Options object.
-         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
-         */
-        put: function(key, value, options) {
-          $$cookieWriter(key, value, calcOptions(options));
-        },
-
-        /**
-         * @ngdoc method
-         * @name $cookies#putObject
-         *
-         * @description
-         * Serializes and sets a value for given cookie key
-         *
-         * @param {string} key Id for the `value`.
-         * @param {Object} value Value to be stored.
-         * @param {Object=} options Options object.
-         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
-         */
-        putObject: function(key, value, options) {
-          this.put(key, angular.toJson(value), options);
-        },
-
-        /**
-         * @ngdoc method
-         * @name $cookies#remove
-         *
-         * @description
-         * Remove given cookie
-         *
-         * @param {string} key Id of the key-value pair to delete.
-         * @param {Object=} options Options object.
-         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
-         */
-        remove: function(key, options) {
-          $$cookieWriter(key, undefined, calcOptions(options));
-        }
-      };
-    }];
-  }]);
-
-angular.module('ngCookies').
-/**
- * @ngdoc service
- * @name $cookieStore
- * @deprecated
- * @requires $cookies
- *
- * @description
- * Provides a key-value (string-object) storage, that is backed by session cookies.
- * Objects put or retrieved from this storage are automatically serialized or
- * deserialized by angular's toJson/fromJson.
- *
- * Requires the {@link ngCookies `ngCookies`} module to be installed.
- *
- * <div class="alert alert-danger">
- * **Note:** The $cookieStore service is **deprecated**.
- * Please use the {@link ngCookies.$cookies `$cookies`} service instead.
- * </div>
- *
- * @example
- *
- * ```js
- * angular.module('cookieStoreExample', ['ngCookies'])
- *   .controller('ExampleController', ['$cookieStore', function($cookieStore) {
- *     // Put cookie
- *     $cookieStore.put('myFavorite','oatmeal');
- *     // Get cookie
- *     var favoriteCookie = $cookieStore.get('myFavorite');
- *     // Removing a cookie
- *     $cookieStore.remove('myFavorite');
- *   }]);
- * ```
- */
- factory('$cookieStore', ['$cookies', function($cookies) {
-
-    return {
-      /**
-       * @ngdoc method
-       * @name $cookieStore#get
-       *
-       * @description
-       * Returns the value of given cookie key
-       *
-       * @param {string} key Id to use for lookup.
-       * @returns {Object} Deserialized cookie value, undefined if the cookie does not exist.
-       */
-      get: function(key) {
-        return $cookies.getObject(key);
-      },
-
-      /**
-       * @ngdoc method
-       * @name $cookieStore#put
-       *
-       * @description
-       * Sets a value for given cookie key
-       *
-       * @param {string} key Id for the `value`.
-       * @param {Object} value Value to be stored.
-       */
-      put: function(key, value) {
-        $cookies.putObject(key, value);
-      },
-
-      /**
-       * @ngdoc method
-       * @name $cookieStore#remove
-       *
-       * @description
-       * Remove given cookie
-       *
-       * @param {string} key Id of the key-value pair to delete.
-       */
-      remove: function(key) {
-        $cookies.remove(key);
-      }
-    };
-
-  }]);
-
-/**
- * @name $$cookieWriter
- * @requires $document
- *
- * @description
- * This is a private service for writing cookies
- *
- * @param {string} name Cookie name
- * @param {string=} value Cookie value (if undefined, cookie will be deleted)
- * @param {Object=} options Object with options that need to be stored for the cookie.
- */
-function $$CookieWriter($document, $log, $browser) {
-  var cookiePath = $browser.baseHref();
-  var rawDocument = $document[0];
-
-  function buildCookieString(name, value, options) {
-    var path, expires;
-    options = options || {};
-    expires = options.expires;
-    path = angular.isDefined(options.path) ? options.path : cookiePath;
-    if (angular.isUndefined(value)) {
-      expires = 'Thu, 01 Jan 1970 00:00:00 GMT';
-      value = '';
-    }
-    if (angular.isString(expires)) {
-      expires = new Date(expires);
-    }
-
-    var str = encodeURIComponent(name) + '=' + encodeURIComponent(value);
-    str += path ? ';path=' + path : '';
-    str += options.domain ? ';domain=' + options.domain : '';
-    str += expires ? ';expires=' + expires.toUTCString() : '';
-    str += options.secure ? ';secure' : '';
-
-    // per http://www.ietf.org/rfc/rfc2109.txt browser must allow at minimum:
-    // - 300 cookies
-    // - 20 cookies per unique domain
-    // - 4096 bytes per cookie
-    var cookieLength = str.length + 1;
-    if (cookieLength > 4096) {
-      $log.warn("Cookie '" + name +
-        "' possibly not set or overflowed because it was too large (" +
-        cookieLength + " > 4096 bytes)!");
-    }
-
-    return str;
-  }
-
-  return function(name, value, options) {
-    rawDocument.cookie = buildCookieString(name, value, options);
-  };
-}
-
-$$CookieWriter.$inject = ['$document', '$log', '$browser'];
-
-angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterProvider() {
-  this.$get = $$CookieWriter;
-});
-
-
-})(window, window.angular);
-
 },{}],13:[function(require,module,exports){
-require('./angular-cookies');
-module.exports = 'ngCookies';
-
-},{"./angular-cookies":12}],14:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -5059,7 +4755,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -33964,11 +33660,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":15}]},{},[9])
+},{"./angular":14}]},{},[9])
 
 
 //# sourceMappingURL=main.js.map

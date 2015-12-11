@@ -1,12 +1,22 @@
-<h2>Mmmmm, smell the bacon, hear the sizzle!</h2>
+<h2>Inspired by memorable breakfast aromas!</h2>
+<hr/>
 
 <ul class="gridpics">
   <li ng-repeat="recipe in recipes">
-    <img ng-src="{{ recipe.url }}">
-    <h4><a href="#/single/{{ recipe.objectId }}"> {{recipe.recipe}}</a></h4> 
-  </li>  
-</ul>    
-        
+    <a href="#/single/{{recipe.objectId}}">
+      <div class='recipe-img'>
+      <img ng-src="{{ recipe.url }}">
+      </div>
+    </a>
+  </li>
+</ul>       
+
+    
+
+
+    
+    
+       
 
 
 

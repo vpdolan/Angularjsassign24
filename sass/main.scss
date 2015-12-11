@@ -1,6 +1,9 @@
 // Put any @imports here
 // See Readme for a list of supported ones
 @import "foundation";
+@import 'font-awesome';
+@import 'bourbon';
+@import 'neat';
 
 body {
   background: #e2ebf3;
@@ -10,18 +13,85 @@ body {
 
 
 .container {
-  width: 800px;
-  margin: 20px auto;
-  height: 1300px;
+  width: 100%;
+  margin: auto;
+  @include outer-container;
   
 }
 
-.wrapper {
+#singleImage {
+  position: relative;
+  width: 50%;
+  border-radius: 15px;
+  border: 2px solid #0039e6;
+  
+}
+
+.recipe-img{
+  border-radius: 15px;
+  overflow: hidden;
+  width: 170px;
+  height: 170px;
+  margin-left: 2.8%;
+  @include span-columns(3.7);
+  border: 1.5px solid #0039e6;
+  margin-top: 25px;
+  position: relative;
+}
+.recipe-img img{
+  width: 350px;
+  height:200px;
+}
+
+// .fill {
+//     overflow: hidden;
+//     background-size: cover;
+//     background-position: center;
+//     background-image:"path/to/image.jpg";
+// }
+
+.img {
+  width: 100%;
+  //border: 1.5px solid #0039e6;
+  //border-radius: 15px;
+  //overlflow: hidden;
+}
+
+// .hidden {
+//   position: absolute;
+//   top: 20%;
+//   margin-left: 8%;
+//   display: none;
+//   color: #ffffff;
+// }
+
+// .show {
+//   position: absolute;
+//   color: #ffffff;
+//   margin-left: 40%;
+//   margin-top: -115px;
+// }
+
+
+.recipes-page {
+  display: inline-block;
+  padding: 0;
+}
+
+
+
+.wrapper img {
   margin-bottom: 5px;
+  height: 500px;
 }
 
 ul {
   list-style: none;
+}
+
+
+h2 {
+  text-align: center;
 }
 
 

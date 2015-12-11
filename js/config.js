@@ -9,12 +9,6 @@ let config = function($stateProvider, $urlRouterProvider) {
 
     })
 
-    .state('root.home', {
-      url: '/home',
-      controller: 'HomeController',
-      templateUrl: 'templates/home.tpl.html'
-    })
-
     .state('root.recipe', {
       url: '/',
       controller: 'RecipeController',
@@ -47,17 +41,17 @@ let config = function($stateProvider, $urlRouterProvider) {
       templateUrl: 'templates/addRecipes.tpl.html'
     })
 
+    .state('root.submissions', {
+      url: '/submissions',
+      controller: 'SubmissionsController as vm',
+      templateUrl: 'templates/submissions.tpl.html'
+    })
+    //using vm, scope not included in ContactController
     .state('root.contact', {
       url: '/contact',
-      controller: 'ContactController',
+      controller: 'ContactController as vm',
       templateUrl: 'templates/contact.tpl.html'
     })
-
-    .state('root.login', {
-      url: '/login',
-      controller: 'LoginController',
-      templateUrl: 'templates/login.tpl.html'
-    });
 
 };
 

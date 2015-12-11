@@ -1,26 +1,21 @@
 import angular from 'angular';
 import 'angular-ui-router';
-import 'angular-cookies';
 import config from './config';
 
 import AddController from './controllers/add.controller';
 import EditController from './controllers/edit.controller';
 import SingleController from './controllers/single.controller';
 import ContactController from './controllers/contact.controller';
+import SubmissionsController from './controllers/submissions.controller';
 import AboutController from './controllers/about.controller';
 import RecipeController from './controllers/recipe.controller';
-import LoginController from './controllers/login.controller';
-import HomeController from './controllers.home.controller';
-
-
-
 import RecipeService from './services/recipe.service'; 
-import UserService from './services/user.service';
-
+import ContactService from './services/contact.service';
+import SubmissionsService from './services/submissions.service';
 
 
 angular
-  .module('app', ['ui.router', 'ngCookies'])
+  .module('app', ['ui.router'])
   .constant('PARSE', {
     URL: 'https://api.parse.com/1/',
     CONFIG: {
@@ -38,8 +33,8 @@ angular
   .controller('RecipeController', RecipeController)
   .controller('ContactController', ContactController)
   .controller('AboutController', AboutController)
-  .controller('LoginController', LoginController)
-  .controller('HomeController', HomeController)
+  .controller('SubmissionsController', SubmissionsController)
   .service('RecipeService', RecipeService)
-  .service('UserService', UserService)
+  .service('ContactService', ContactService)
+  .service('SubmissionsService', SubmissionsService)
   ;

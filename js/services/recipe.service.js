@@ -1,7 +1,7 @@
 let RecipeService = function($http, PARSE) {
   
   let url = PARSE.URL + 'classes/recipes';
-
+  //View of Existing Recipe List
   this.getRecipeList = function () {     
     return $http({
       url : url,
@@ -10,7 +10,7 @@ let RecipeService = function($http, PARSE) {
       cache : true
     });
   };
-
+  //View of Single Existing Recipe
   this.getSingleRecipe = function (recipeId) {     
     return $http({
       url     : url + '/' + recipeId,
@@ -20,13 +20,13 @@ let RecipeService = function($http, PARSE) {
     });
     
   };
-
+  //Adding a New Recipe 
   let MyParseDataConstructor = function (obj) {
-    this.Name = obj.name;
-    this.Url = obj.url;
-    this.Ingredients = obj.ingredients;
-    this.Description = obj.description;
-    this.Author = obj.author;
+    this.name = obj.name;
+    this.url = obj.url;
+    this.ingredients = obj.ingredients;
+    this.description = obj.description;
+    this.author = obj.author;
   };
   
 
@@ -34,7 +34,7 @@ let RecipeService = function($http, PARSE) {
     let temp = new MyParseDataConstructor(obj);
     return $http.post(url, temp, PARSE.CONFIG);
   };
-
+  //Editing and Deleting an Existing Recipe
   this.update = function (obj) {
     return $http.put(url + '/' + obj.objectId, obj, PARSE.CONFIG);
   };

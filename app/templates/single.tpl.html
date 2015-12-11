@@ -1,13 +1,15 @@
-<h3>{{ singleRecipeDetails.Name}} - {{ singleRecipeDetails.Author }}</h3>
+<h3>{{singleRecipeDetails.Recipe}} - {{singleRecipeDetails.author}}</h3>
 
-<a href="#/edit/{{ singleRecipeDetails.objectId }}">Edit Recipe</a>
+<a href="#/edit/{{singleRecipeDetails.objectId }}">Edit Recipe</a> |
 <a href="#/" ng-click="delete(singleRecipeDetails)">Delete Recipe</a>
 <hr/>
 
-<img id="singleImage" ng-src="{{ singleRecipeDetails.Picture }}">
+<label>Recipe:{{singleRecipeDetails.name}}</label>
+
+<img id="singleImage" ng-src="{{singleRecipeDetails.url}}">
 <hr/>
 
 <h4>Ingredients</h4>
-<p class="text">"{{ singleRecipeDetails.Ingredients }}</p>
+<p class="text">{{singleRecipeDetails.ingredients}}</p>
 <h4>Baking Instructions</h4>
-<p class="text">{{ singleRecipeDetails.Instructions }}</p>  
+<p class="text">{{singleRecipeDetails.instructions}}</p>  
